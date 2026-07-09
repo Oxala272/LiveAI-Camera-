@@ -25,6 +25,7 @@ button{
     font-size:18px;
     cursor:pointer;
 }
+
 canvas{
     width:95%;
     max-width:500px;
