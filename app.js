@@ -3,33 +3,34 @@ const canvas = document.getElementById("output");
 const ctx = canvas.getContext("2d");
 const startButton = document.getElementById("startCamera");
 
-startButton.addEventListener("click", async () => {
+startButton.onclick = async function () {
+    alert("Button clicked!");
+
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: "user"
-            },
+            video: true,
             audio: false
         });
+
+        alert("Camera connected!");
 
         video.srcObject = stream;
 
         video.onloadedmetadata = () => {
-            video.play();
-
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
 
-            drawFrame();
+            function draw() {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                requestAnimationFrame(draw);
+            }
+
+            draw();
         };
 
-    } catch (err) {
-        alert("Camera permission denied.");
-        console.error(err);
+    } catch (e) {
+        alert("Error: " + e.message);
+        console.log(e);
     }
-});
+};
 
-function drawFrame() {
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    requestAnimationFrame(drawFrame);
-}
